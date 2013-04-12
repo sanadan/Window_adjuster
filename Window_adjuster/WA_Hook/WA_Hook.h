@@ -1,0 +1,25 @@
+///
+///	@fn		WA_Hook.h
+///	@brief	フックDLLエントリ
+///
+//	2007/04/19	真田	新規作成
+//
+
+#pragma once
+
+// 以下の ifdef ブロックは DLL からのエクスポートを容易にするマクロを作成するための 
+// 一般的な方法です。この DLL 内のすべてのファイルは、コマンド ラインで定義された WA_HOOK_EXPORTS
+// シンボルでコンパイルされます。このシンボルは、この DLL を使うプロジェクトで定義することはできません。
+// ソースファイルがこのファイルを含んでいる他のプロジェクトは、 
+// WA_HOOK_API 関数を DLL からインポートされたと見なすのに対し、この DLL は、このマクロで定義された
+// シンボルをエクスポートされたと見なします。
+#ifdef WA_HOOK_EXPORTS
+#define WA_HOOK_API __declspec(dllexport)
+#else
+#define WA_HOOK_API __declspec(dllimport)
+#endif
+
+WA_HOOK_API HRESULT WA_Enable_hook() ;
+WA_HOOK_API HRESULT WA_Disable_hook() ;
+
+// [[[[ End of this header ]]]]]

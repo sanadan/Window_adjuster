@@ -1,0 +1,19 @@
+■共通
+　単語間は「_」を使用する。
+　DWORD temp_data ;
+
+■#defineマクロ
+　全て大文字
+　#define MACRO( x ) ( ( ( x ) >= 0 ) ? ( x ) : 0 )
+
+■ローカル変数
+　先頭が小文字
+　DWORD result ;
+
+■その他
+　先頭が大文字
+　DWORD Last_result ;
+
+■省略形
+　ptr:ポインタ
+　ret:戻り値
