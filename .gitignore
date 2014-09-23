@@ -1,0 +1,10 @@
+/Window_adjuster/Release
+/Window_adjuster/WA_Hook/x64/Release
+
+/Window_adjuster/*.opensdf
+
+/Window_adjuster/*.sdf
+
+/Window_adjuster/x64/Release
+
+/Window_adjuster/*.suo
