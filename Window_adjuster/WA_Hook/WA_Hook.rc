@@ -57,8 +57,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,4,0,0
- PRODUCTVERSION 0,4,0,0
+ FILEVERSION 0,5,0,0
+ PRODUCTVERSION 0,5,0,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -74,12 +74,12 @@ BEGIN
         BLOCK "041104b0"
         BEGIN
             VALUE "FileDescription", "Window adjuster hook dll"
-            VALUE "FileVersion", "0, 4, 0, 0"
+            VALUE "FileVersion", "0, 5, 0, 0"
             VALUE "InternalName", "WA_Hook"
-            VALUE "LegalCopyright", "Copyright (C) 2007-2011 Javelin Software"
+            VALUE "LegalCopyright", "Copyright (C) 2007-2014 Javelin Software"
             VALUE "OriginalFilename", "WA_Hook.dll"
             VALUE "ProductName", "Window adjuster"
-            VALUE "ProductVersion", "0.4"
+            VALUE "ProductVersion", "0.5"
         END
     END
     BLOCK "VarFileInfo"
