@@ -169,7 +169,14 @@ void Main_window::OnDestroy()
 	Notify_icon.Delete() ;
 
 	// フック解除
-	WA_Disable_hook() ;
+	HRESULT result = WA_Disable_hook() ;
+	if (result != NOERROR)
+	{
+		TString msg;
+		//msg.Format_message(_T("%1!d!"), result);
+		msg.Format_message(result);
+		Message_box(msg);
+	}
 
 	// アプリケーション終了メッセージをポスト
 	::PostQuitMessage( 0 ) ;

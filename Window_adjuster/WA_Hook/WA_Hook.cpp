@@ -12,6 +12,8 @@
 #include "Auto_reset.hpp"
 #include "Debug_tool.hpp"
 // #include "Point.hpp"
+#include "TString.hpp"
+using namespace Javelin;
 
 #pragma warning ( disable : 4127 )	// 定数条件式の警告抑止
 
@@ -51,7 +53,7 @@ BOOL APIENTRY DllMain( HMODULE module_handle, DWORD reason_for_call, LPVOID )
 	{
 		case DLL_PROCESS_ATTACH :
 			Module_handle = module_handle ;
-//			::Log_init( _T( "c:\\temp\\WA_Hook.log" ) ) ;	// debug
+			::Log_init( _T( "c:\\temp\\WA_Hook.log" ) ) ;	// debug
 			break ;
 
 		case DLL_THREAD_ATTACH :
@@ -430,10 +432,15 @@ LOG( _T( "Adjust()" ) ) ;
 ///
 WA_HOOK_API HRESULT WA_Enable_hook()
 {
+LOG(_T("WA_Enable_hook()"));
 	if ( Hook_handle != NULL ) return ERROR_SUCCESS ;
 
 	Hook_handle = ::SetWindowsHookEx( WH_MOUSE, ( HOOKPROC )Mouse_proc, Module_handle, 0 ) ;
 	if ( Hook_handle == NULL ) return ::GetLastError() ;
+
+TString msg;
+msg.Format_message(_T("%1!x!"), Hook_handle);
+LOG(msg);
 
 #if 0
 	// OSバージョンチェック
@@ -461,12 +468,17 @@ WA_HOOK_API HRESULT WA_Enable_hook()
 ///
 WA_HOOK_API HRESULT WA_Disable_hook()
 {
-	if ( Hook_handle == NULL ) return ERROR_SUCCESS ;
+LOG(_T("WA_Disable_hook()"));
+TString msg;
+msg.Format_message(_T("%1!x!"), Hook_handle);
+LOG(msg);
+
+	if (Hook_handle == NULL) return ERROR_SUCCESS;
 
 	BOOL ret = ::UnhookWindowsHookEx( Hook_handle ) ;
 	Hook_handle = NULL ;
 
-	return ret ? ERROR_SUCCESS : ::GetLastError() ;
+	return ret ? ERROR_SUCCESS : ::GetLastError();
 }
 
 // [[[[[ End of this module ]]]]]

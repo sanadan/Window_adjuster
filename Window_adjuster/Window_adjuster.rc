@@ -87,8 +87,8 @@ CAPTION "ÉoÅ[ÉWÉáÉìèÓïÒ"
 FONT 12, "MS Shell Dlg", 400, 0, 0x80
 BEGIN
     ICON            IDI_MAIN,IDC_MYICON,4,4,20,20
-    LTEXT           "Window adjuster Version 0.4",IDC_VERSION_STATIC,24,4,120,12,SS_NOPREFIX | SS_CENTERIMAGE
-    LTEXT           "Copyright (C) 2007-2011 Javelin Software",IDC_STATIC,24,20,136,8
+    LTEXT           "Window adjuster Version 0.5",IDC_VERSION_STATIC,24,4,120,12,SS_NOPREFIX | SS_CENTERIMAGE
+    LTEXT           "Copyright (C) 2007-2014 Javelin Software",IDC_STATIC,24,20,136,8
     DEFPUSHBUTTON   "OK",IDOK,68,36,32,12,WS_GROUP
 END
 
