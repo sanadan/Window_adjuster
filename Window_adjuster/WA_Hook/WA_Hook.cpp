@@ -32,6 +32,9 @@ enum Adjust_type
 // グローバルフック用変数
 #pragma data_seg ( ".share" )
 HHOOK Hook_handle = NULL ;
+HWND Main_hwnd = NULL;
+UINT RWM_ADJUST = WM_NULL;
+UINT RWM_SET_PARAM = WM_NULL;
 #pragma data_seg ()
 #pragma comment( linker, "/SECTION:.share,RWS" )
 
@@ -52,14 +55,17 @@ BOOL APIENTRY DllMain( HMODULE module_handle, DWORD reason_for_call, LPVOID )
 	switch ( reason_for_call )
 	{
 		case DLL_PROCESS_ATTACH :
-			Module_handle = module_handle ;
-			::Log_init( _T( "c:\\temp\\WA_Hook.log" ) ) ;	// debug
+			::Log_init(_T("c:\\temp\\WA_Hook.log"));	// debug
+			LOG(_T("----- DLL_PROCESS_ATTACH -----"));
+			Module_handle = module_handle;
 			break ;
 
 		case DLL_THREAD_ATTACH :
 		case DLL_THREAD_DETACH :
+			break;
 		case DLL_PROCESS_DETACH :
-			break ;
+			LOG(_T("----- DLL_PROCESS_DETACH -----"));
+			break;
 	}
     return TRUE ;
 }
@@ -113,43 +119,6 @@ static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 		switch ( wparam )
 		{
 			case WM_NCLBUTTONDBLCLK :	// 左ダブルクリック
-#if 0
-				switch ( mhs_ptr->wHitTestCode )
-				{
-					case HTTOP :
-					case HTTOPLEFT :
-					case HTTOPRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_TOP ) ;
-						break ;
-
-					case HTBOTTOM :
-					case HTBOTTOMLEFT :
-					case HTBOTTOMRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_BOTTOM ) ;
-						break ;
-				}
-
-				if ( !::GetWindowPlacement( mhs_ptr->hwnd, &window_placement ) )
-				{	// ウィンドウ位置情報取得失敗
-					break ;
-				}
-
-				switch ( mhs_ptr->wHitTestCode )
-				{
-					case HTLEFT :
-					case HTTOPLEFT :
-					case HTBOTTOMLEFT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_LEFT ) ;
-						break ;
-
-					case HTRIGHT :
-					case HTTOPRIGHT :
-					case HTBOTTOMRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_RIGHT ) ;
-						break ;
-				}
-				break ;
-#endif
 				switch ( mhs_ptr->wHitTestCode )
 				{
 					case HTTOP :
@@ -167,8 +136,10 @@ static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 			case WM_NCRBUTTONUP :	// 右クリック
 LOG( _T( "WM_NCRBUTTONUP" ) ) ;
 				if ( mhs_ptr->wHitTestCode == HTCLOSE )
-				{
-					result = Show_adjust_dialog( *mhs_ptr ) ;
+				{	// クローズボタン上
+					::SendMessage(Main_hwnd, RWM_SET_PARAM, (WPARAM)mhs_ptr->hwnd, mhs_ptr->wHitTestCode);
+					::PostMessage(Main_hwnd, RWM_ADJUST, wparam, lparam);
+//					result = Show_adjust_dialog(*mhs_ptr);
 					break ;
 				}
 				if ( mhs_ptr->wHitTestCode != HTMAXBUTTON )
@@ -180,21 +151,6 @@ LOG( _T( "WM_NCRBUTTONUP" ) ) ;
 
 			case WM_NCRBUTTONDBLCLK :	// 右ダブルクリック
 LOG( _T( "WM_NCRBUTTONDBLCLK" ) ) ;
-#if 0
-				switch ( mhs_ptr->wHitTestCode )
-				{
-					case HTTOP :
-					case HTBOTTOM :
-						result = Adjust( *mhs_ptr, window_placement, MAXIMIZE_HEIGHT, mhs_ptr->wHitTestCode ) ;
-						break ;
-
-					case HTLEFT :
-					case HTRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MAXIMIZE_WIDTH, mhs_ptr->wHitTestCode ) ;
-						break ;
-				}
-				break ;
-#endif
 				switch ( mhs_ptr->wHitTestCode )
 				{
 					case HTTOP :
@@ -430,7 +386,7 @@ LOG( _T( "Adjust()" ) ) ;
 ///	@brief	フック有効化
 ///	@return	winerror.h準拠
 ///
-WA_HOOK_API HRESULT WA_Enable_hook()
+WA_HOOK_API HRESULT WA_Enable_hook( HWND hwnd )
 {
 LOG(_T("WA_Enable_hook()"));
 	if ( Hook_handle != NULL ) return ERROR_SUCCESS ;
@@ -439,8 +395,16 @@ LOG(_T("WA_Enable_hook()"));
 	if ( Hook_handle == NULL ) return ::GetLastError() ;
 
 TString msg;
-msg.Format_message(_T("%1!x!"), Hook_handle);
+msg.Format_message(_T("Hook_handle = %1!x!"), Hook_handle);
 LOG(msg);
+
+	Main_hwnd = hwnd ;
+msg.Format_message(_T("Main_hwnd = %1!x!"), Main_hwnd);
+LOG(msg);
+
+	// ウィンドウメッセージ登録
+	RWM_ADJUST = ::RegisterWindowMessage(RWM_ADJUST_MESSAGE);
+	RWM_SET_PARAM = ::RegisterWindowMessage(RWM_SET_PARAM_MESSAGE);
 
 #if 0
 	// OSバージョンチェック

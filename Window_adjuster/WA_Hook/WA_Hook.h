@@ -19,7 +19,10 @@
 #define WA_HOOK_API __declspec(dllimport)
 #endif
 
-WA_HOOK_API HRESULT WA_Enable_hook() ;
+#define	RWM_ADJUST_MESSAGE	_T("Javelin/RWM_ADJUST")
+#define	RWM_SET_PARAM_MESSAGE	_T("Javelin/RWM_SET_PARAM")
+
+WA_HOOK_API HRESULT WA_Enable_hook( HWND hwnd ) ;
 WA_HOOK_API HRESULT WA_Disable_hook() ;
 
 // [[[[ End of this header ]]]]]

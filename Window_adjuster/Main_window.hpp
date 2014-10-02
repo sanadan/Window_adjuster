@@ -28,6 +28,8 @@ protected :
 	void On_layout_load() ;
 	void On_layout_clear() ;
 
+	void On_adjust(WPARAM wparam, LPARAM lparam);
+
 //	HRESULT Get_application_data_folder( Javelin::TPath& path ) ;
 	void Get_file_name( Javelin::TString& file_name ) ;
 	void Get_file_name2( Javelin::TString& file_name ) ;
@@ -35,6 +37,9 @@ protected :
 private :
 	Javelin::Notify_icon Notify_icon ;
 	UINT RWM_TASKBARCREATED ;
+	UINT RWM_ADJUST;
+	UINT RWM_SET_PARAM;
+	MOUSEHOOKSTRUCT Mouse_hook_struct;
 
 	static LPCTSTR Save_file_name_format ;
 	static LPCTSTR Save_file_name_format2 ;
