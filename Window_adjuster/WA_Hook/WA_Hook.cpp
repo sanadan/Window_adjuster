@@ -35,6 +35,7 @@ HHOOK Hook_handle = NULL ;
 HWND Main_hwnd = NULL;
 UINT RWM_ADJUST = WM_NULL;
 UINT RWM_SET_PARAM = WM_NULL;
+UINT RWM_SET_PARAM2 = WM_NULL;
 #pragma data_seg ()
 #pragma comment( linker, "/SECTION:.share,RWS" )
 
@@ -138,6 +139,7 @@ LOG( _T( "WM_NCRBUTTONUP" ) ) ;
 				if ( mhs_ptr->wHitTestCode == HTCLOSE )
 				{	// クローズボタン上
 					::SendMessage(Main_hwnd, RWM_SET_PARAM, (WPARAM)mhs_ptr->hwnd, mhs_ptr->wHitTestCode);
+					::SendMessage(Main_hwnd, RWM_SET_PARAM2, mhs_ptr->pt.x, mhs_ptr->pt.y);
 					::PostMessage(Main_hwnd, RWM_ADJUST, wparam, lparam);
 //					result = Show_adjust_dialog(*mhs_ptr);
 					break ;
@@ -405,6 +407,7 @@ LOG(msg);
 	// ウィンドウメッセージ登録
 	RWM_ADJUST = ::RegisterWindowMessage(RWM_ADJUST_MESSAGE);
 	RWM_SET_PARAM = ::RegisterWindowMessage(RWM_SET_PARAM_MESSAGE);
+	RWM_SET_PARAM2 = ::RegisterWindowMessage(RWM_SET_PARAM2_MESSAGE);
 
 #if 0
 	// OSバージョンチェック

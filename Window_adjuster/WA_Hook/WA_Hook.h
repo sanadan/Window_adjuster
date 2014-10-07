@@ -21,6 +21,7 @@
 
 #define	RWM_ADJUST_MESSAGE	_T("Javelin/RWM_ADJUST")
 #define	RWM_SET_PARAM_MESSAGE	_T("Javelin/RWM_SET_PARAM")
+#define	RWM_SET_PARAM2_MESSAGE	_T("Javelin/RWM_SET_PARAM2")
 
 WA_HOOK_API HRESULT WA_Enable_hook( HWND hwnd ) ;
 WA_HOOK_API HRESULT WA_Disable_hook() ;

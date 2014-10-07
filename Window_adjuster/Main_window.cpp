@@ -13,6 +13,9 @@
 #include "Misc.hpp"
 #include "Process.hpp"
 #include "Dialog.hpp"
+#include "Adjust_dialog.hpp"
+#include "Auto_reset.hpp"
+
 using namespace Javelin;
 
 // #pragma warning ( disable : 4127 )
@@ -32,6 +35,7 @@ Main_window::Main_window()
 	RWM_ADJUST = WM_NULL;
 	RWM_SET_PARAM = WM_NULL;
 	Initialize(Mouse_hook_struct);
+	Show_dialog = FALSE;
 }
 
 ///	@brief	ウィンドウプロシージャ
@@ -94,6 +98,11 @@ LRESULT Main_window::Window_proc( UINT message, WPARAM wparam, LPARAM lparam )
 				Mouse_hook_struct.hwnd = (HWND)wparam;
 				Mouse_hook_struct.wHitTestCode = (UINT)lparam;
 			}
+			else if (message == RWM_SET_PARAM2)
+			{	// SET_PARAM2メッセージ
+				Mouse_hook_struct.pt.x = (LONG)wparam;
+				Mouse_hook_struct.pt.y = (LONG)lparam;
+			}
 			else if (message == RWM_ADJUST)
 			{
 				On_adjust(wparam, lparam);
@@ -118,10 +127,19 @@ void Main_window::On_adjust( WPARAM wparam, LPARAM lparam )
 			if (Mouse_hook_struct.wHitTestCode == HTCLOSE)
 			{	// クローズボタン上
 ::OutputDebugString(_T("HTCLOSE\n"));
-//				Message_box(_T("HT_CLOSE"));
-//				result = Show_adjust_dialog(*mhs_ptr);
+				if (Show_dialog) break;	// 既に表示している
+
+				Javelin::Auto_reset< BOOL > auto_reset(Show_dialog, TRUE, FALSE);
+
+				Adjust_dialog adjust_dialog;
+				adjust_dialog.Set_instance(Get_instance());
+				adjust_dialog.Set_parent(Mouse_hook_struct.hwnd);
+				adjust_dialog.Set_position(Mouse_hook_struct.pt);
+				adjust_dialog.Do_modal();
+
 				break;
 			}
+#if 0
 			if (Mouse_hook_struct.wHitTestCode == HTMAXBUTTON)
 			{	// 最大化ボタン上
 ::OutputDebugString(_T("HTMAXBUTTON\n"));
@@ -129,6 +147,7 @@ void Main_window::On_adjust( WPARAM wparam, LPARAM lparam )
 			}
 //			result = Adjust(*mhs_ptr, window_placement, AUTO);
 			break;
+#endif
 	}
 }
 
@@ -199,6 +218,13 @@ void Main_window::OnCreate()
 		FATAL_MESSAGE();	// 本来はあり得ない
 	}
 	
+	// SET_PARAM2メッセージの登録
+	RWM_SET_PARAM2 = ::RegisterWindowMessage(RWM_SET_PARAM2_MESSAGE);
+	if (RWM_SET_PARAM2 == NULL)
+	{
+		FATAL_MESSAGE();	// 本来はあり得ない
+	}
+
 	// フック設定
 	WA_Enable_hook( Get_handle() ) ;
 #if 0

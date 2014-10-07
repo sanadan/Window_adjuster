@@ -39,7 +39,9 @@ private :
 	UINT RWM_TASKBARCREATED ;
 	UINT RWM_ADJUST;
 	UINT RWM_SET_PARAM;
+	UINT RWM_SET_PARAM2;
 	MOUSEHOOKSTRUCT Mouse_hook_struct;
+	BOOL Show_dialog;
 
 	static LPCTSTR Save_file_name_format ;
 	static LPCTSTR Save_file_name_format2 ;
