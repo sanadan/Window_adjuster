@@ -27,4 +27,4 @@ private :
 	Javelin::TPath Application_data_folder ; 
 } ;
 
-// [[[[[ End of this header ]]]]]
+// [EOF]

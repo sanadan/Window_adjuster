@@ -1,9 +1,7 @@
-///
 ///	@fn		WA_Hook.h
 ///	@brief	フックDLLエントリ
-///
-//	2007/04/19	真田	新規作成
 //
+//	2007/04/19	真田	新規作成
 
 #pragma once
 
@@ -26,4 +24,4 @@
 WA_HOOK_API HRESULT WA_Enable_hook( HWND hwnd ) ;
 WA_HOOK_API HRESULT WA_Disable_hook() ;
 
-// [[[[ End of this header ]]]]]
+// [EOF]

@@ -1,18 +1,13 @@
-///
 ///	@file	Adjust_dialog.hpp
 ///	@note	調整ダイアログクラス
-///
-//	2007/04/15	真田	新規作成
 //
+//	2007/04/15	真田	新規作成
 
 #pragma once
 
 #include "Dialog.hpp"
 
-///
-///	@class	Adjust_dialog
 ///	@brief	調整ダイアログクラス
-///
 class Adjust_dialog : public Javelin::Dialog
 {
 public :
@@ -41,4 +36,4 @@ private :
 	Adjust_dialog& operator =( const Adjust_dialog& ) ;
 } ;
 
-// [[[[[ End of this header ]]]]]
+// [EOF]

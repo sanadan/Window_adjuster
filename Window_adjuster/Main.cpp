@@ -9,9 +9,6 @@
 #include "Debug_tool.hpp"
 using namespace Javelin ;
 
-// #define APP_ID	_T( "Javelin software - Window adjuster" )
-// #define APP_TITLE	_T( "Window adjuster" )
-
 Main App ;	///< メインアプリケーションオブジェクト
 LPCTSTR Main::Title = _T( "Window adjuster" ) ;	///< アプリケーション名
 LPCTSTR Main::Internal_name = _T( "Javelin_Software\\Window_adjuster" ) ;	///< 内部名／Application Data配下のフォルダ名に使用

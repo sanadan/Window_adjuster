@@ -47,4 +47,4 @@ private :
 	static LPCTSTR Save_file_name_format2 ;
 } ;
 
-// [[[[[ End of this header ]]]]]
+// [EOF]

@@ -1,9 +1,7 @@
-///
 ///	@fn		WA_Hook.cpp
 ///	@brief	フックDLLエントリ
 ///
 //	2007/04/19	真田	新規作成
-//
 
 #include "stdafx.h"
 #include "WA_Hook.h"
@@ -11,11 +9,11 @@
 #include "Misc.hpp"
 #include "Auto_reset.hpp"
 #include "Debug_tool.hpp"
-// #include "Point.hpp"
 #include "TString.hpp"
+
 using namespace Javelin;
 
-#pragma warning ( disable : 4127 )	// 定数条件式の警告抑止
+// #pragma warning ( disable : 4127 )	// 定数条件式の警告抑止
 
 enum Adjust_type
 {
@@ -44,19 +42,15 @@ BOOL Show_dialog = FALSE ;
 
 // ローカル関数宣言
 LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs ) ;
-// BOOL Is_caption( UINT hit_test_code ) ;
 LRESULT Adjust( MOUSEHOOKSTRUCT& mhs, WINDOWPLACEMENT& window_placement, Adjust_type type, UINT hit_code = NULL ) ;
 
-///
-///	@fn		BOOL APIENTRY DllMain( HMODULE module_handle, DWORD reason_for_call, LPVOID )
 ///	@brief	DLLエントリ
-///
 BOOL APIENTRY DllMain( HMODULE module_handle, DWORD reason_for_call, LPVOID )
 {
 	switch ( reason_for_call )
 	{
 		case DLL_PROCESS_ATTACH :
-			::Log_init(_T("c:\\temp\\WA_Hook.log"));	// debug
+//			::Log_init(_T("c:\\temp\\WA_Hook.log"));	// debug
 			LOG(_T("----- DLL_PROCESS_ATTACH -----"));
 			Module_handle = module_handle;
 			break ;
@@ -75,6 +69,7 @@ typedef BOOL (WINAPI *LPFN_ISWOW64MESSAGE) (void);
 
 LPFN_ISWOW64MESSAGE fnIsWow64Message;
 
+///	@brief	64bitメッセージかどうかの判定
 BOOL IsWow64Msg()
 {
     // IsWow64Message is not available on all supported versions of Windows
@@ -91,113 +86,112 @@ BOOL IsWow64Msg()
     else return FALSE;
 }
 
-///
-///	@fn		static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 ///	@brief	マウスフックプロシージャ
-///
 static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 {
 	LRESULT result = 0 ;
 
-	do	// エラー処理用
+//	do	// エラー処理用
+	FOR_ONCE()	// エラー処理用
 	{
-		if ( code < 0 ) break ;
-		if ( code != HC_ACTION ) break ;
-		if ( lparam == NULL ) break ;
+		if (code < 0) break;
+		if (code != HC_ACTION) break;
+		if (lparam == NULL) break;
 
-		const LPMOUSEHOOKSTRUCT mhs_ptr = ( LPMOUSEHOOKSTRUCT )lparam ;
-		WINDOWPLACEMENT window_placement ;
-		window_placement.length = sizeof ( window_placement ) ;
-		if ( !::GetWindowPlacement( mhs_ptr->hwnd, &window_placement ) )
+		const LPMOUSEHOOKSTRUCT mhs_ptr = (LPMOUSEHOOKSTRUCT)lparam;
+		WINDOWPLACEMENT window_placement;
+		window_placement.length = sizeof(window_placement);
+		if (!::GetWindowPlacement(mhs_ptr->hwnd, &window_placement))
 		{	// ウィンドウ位置情報取得失敗
-			break ;
+			break;
 		}
-		if ( window_placement.showCmd == SW_SHOWMAXIMIZED )
+		if (window_placement.showCmd == SW_SHOWMAXIMIZED)
 		{	// 最大化されている
-			break ;
+			break;
 		}
 
-		switch ( wparam )
+		switch (wparam)
 		{
-			case WM_NCLBUTTONDBLCLK :	// 左ダブルクリック
-				switch ( mhs_ptr->wHitTestCode )
-				{
-					case HTTOP :
-					case HTBOTTOM :
-						result = Adjust( *mhs_ptr, window_placement, MAXIMIZE_HEIGHT, mhs_ptr->wHitTestCode ) ;
-						break ;
+		case WM_NCLBUTTONDBLCLK:	// 左ダブルクリック
+			switch (mhs_ptr->wHitTestCode)
+			{
+			case HTTOP:
+			case HTBOTTOM:
+				result = Adjust(*mhs_ptr, window_placement, MAXIMIZE_HEIGHT, mhs_ptr->wHitTestCode);
+				break;
 
-					case HTLEFT :
-					case HTRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MAXIMIZE_WIDTH, mhs_ptr->wHitTestCode ) ;
-						break ;
-				}
-				break ;
+			case HTLEFT:
+			case HTRIGHT:
+				result = Adjust(*mhs_ptr, window_placement, MAXIMIZE_WIDTH, mhs_ptr->wHitTestCode);
+				break;
+			}
+			break;
 
-			case WM_NCRBUTTONUP :	// 右クリック
-LOG( _T( "WM_NCRBUTTONUP" ) ) ;
-				if ( mhs_ptr->wHitTestCode == HTCLOSE )
-				{	// クローズボタン上
-					::SendMessage(Main_hwnd, RWM_SET_PARAM, (WPARAM)mhs_ptr->hwnd, mhs_ptr->wHitTestCode);
-					::SendMessage(Main_hwnd, RWM_SET_PARAM2, mhs_ptr->pt.x, mhs_ptr->pt.y);
-					::PostMessage(Main_hwnd, RWM_ADJUST, wparam, lparam);
-//					result = Show_adjust_dialog(*mhs_ptr);
-					break ;
-				}
-				if ( mhs_ptr->wHitTestCode != HTMAXBUTTON )
-				{	// 最大化ボタン上ではない
-					break ;
-				}
-				result = Adjust( *mhs_ptr, window_placement, AUTO ) ;
-				break ;
+		case WM_NCRBUTTONUP:	// 右クリック
+			LOG(_T("WM_NCRBUTTONUP"));
+			if (mhs_ptr->wHitTestCode == HTCLOSE)
+			{	// クローズボタン上
+				::SendMessage(Main_hwnd, RWM_SET_PARAM, (WPARAM)mhs_ptr->hwnd, mhs_ptr->wHitTestCode);
+				::SendMessage(Main_hwnd, RWM_SET_PARAM2, mhs_ptr->pt.x, mhs_ptr->pt.y);
+				::PostMessage(Main_hwnd, RWM_ADJUST, wparam, lparam);
+				//					result = Show_adjust_dialog(*mhs_ptr);
+				break;
+			}
+			if (mhs_ptr->wHitTestCode != HTMAXBUTTON)
+			{	// 最大化ボタン上ではない
+				break;
+			}
+			result = Adjust(*mhs_ptr, window_placement, AUTO);
+			break;
 
-			case WM_NCRBUTTONDBLCLK :	// 右ダブルクリック
-LOG( _T( "WM_NCRBUTTONDBLCLK" ) ) ;
-				switch ( mhs_ptr->wHitTestCode )
-				{
-					case HTTOP :
-					case HTTOPLEFT :
-					case HTTOPRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_TOP, mhs_ptr->wHitTestCode ) ;
-						break ;
+		case WM_NCRBUTTONDBLCLK:	// 右ダブルクリック
+			LOG(_T("WM_NCRBUTTONDBLCLK"));
+			switch (mhs_ptr->wHitTestCode)
+			{
+			case HTTOP:
+			case HTTOPLEFT:
+			case HTTOPRIGHT:
+				result = Adjust(*mhs_ptr, window_placement, MOVE_TOP, mhs_ptr->wHitTestCode);
+				break;
 
-					case HTBOTTOM :
-					case HTBOTTOMLEFT :
-					case HTBOTTOMRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_BOTTOM, mhs_ptr->wHitTestCode ) ;
-						break ;
-				}
+			case HTBOTTOM:
+			case HTBOTTOMLEFT:
+			case HTBOTTOMRIGHT:
+				result = Adjust(*mhs_ptr, window_placement, MOVE_BOTTOM, mhs_ptr->wHitTestCode);
+				break;
+			}
 
-				if ( !::GetWindowPlacement( mhs_ptr->hwnd, &window_placement ) )
-				{	// ウィンドウ位置情報取得失敗
-					break ;
-				}
+			if (!::GetWindowPlacement(mhs_ptr->hwnd, &window_placement))
+			{	// ウィンドウ位置情報取得失敗
+				break;
+			}
 
-				switch ( mhs_ptr->wHitTestCode )
-				{
-					case HTLEFT :
-					case HTTOPLEFT :
-					case HTBOTTOMLEFT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_LEFT, mhs_ptr->wHitTestCode ) ;
-						break ;
+			switch (mhs_ptr->wHitTestCode)
+			{
+			case HTLEFT:
+			case HTTOPLEFT:
+			case HTBOTTOMLEFT:
+				result = Adjust(*mhs_ptr, window_placement, MOVE_LEFT, mhs_ptr->wHitTestCode);
+				break;
 
-					case HTRIGHT :
-					case HTTOPRIGHT :
-					case HTBOTTOMRIGHT :
-						result = Adjust( *mhs_ptr, window_placement, MOVE_RIGHT, mhs_ptr->wHitTestCode ) ;
-						break ;
-				}
-				break ;
+			case HTRIGHT:
+			case HTTOPRIGHT:
+			case HTBOTTOMRIGHT:
+				result = Adjust(*mhs_ptr, window_placement, MOVE_RIGHT, mhs_ptr->wHitTestCode);
+				break;
+			}
+			break;
 
-			case WM_NCMBUTTONUP :	// 中央クリック
-				if ( ::GetAsyncKeyState( VK_CONTROL ) >= 0 )
-				{	// Ctrlキーが押されていない
-					break ;
-				}
-				result = Show_adjust_dialog( *mhs_ptr ) ;
-				break ;
+		case WM_NCMBUTTONUP:	// 中央クリック
+			if (::GetAsyncKeyState(VK_CONTROL) >= 0)
+			{	// Ctrlキーが押されていない
+				break;
+			}
+			result = Show_adjust_dialog(*mhs_ptr);
+			break;
 		}
-	} while ( 0 ) ;	// エラー処理用
+		//	} while ( 0 ) ;	// エラー処理用
+	}
 
 	LRESULT result2 = ::CallNextHookEx( Hook_handle, code, wparam, lparam) ;
 	if ( result == 0 )
@@ -208,13 +202,10 @@ LOG( _T( "WM_NCRBUTTONDBLCLK" ) ) ;
 	return result ;
 }
 
-///
-///	@fn		LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs )
 ///	@brief	調整ダイアログ表示
 ///	@param	mhs	マウスフック情報
 ///	@retval	0	処理しなかった
 ///	@retval	1	処理した
-///
 LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs )
 {
 	if ( Show_dialog ) return 0	;	// 既に表示している
@@ -235,8 +226,6 @@ LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs )
 	return 1 ;
 }
 
-///
-///	@fn		LRESULT Adjust( MOUSEHOOKSTRUCT& mhs, WINDOWPLACEMENT& window_placement, Adjust_type type, UINT hit_code )
 ///	@brief	ウィンドウ調整
 ///	@param	mhs					マウスフック情報
 ///	@param	window_placement	ウィンドウ位置情報
@@ -256,7 +245,6 @@ LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs )
 ///								== HTRIGHT :	右端
 ///	@retval	0	処理しなかった
 ///	@retval	1	処理した
-///
 LRESULT Adjust( MOUSEHOOKSTRUCT& mhs, WINDOWPLACEMENT& window_placement, Adjust_type type, UINT hit_code )
 {
 LOG( _T( "Adjust()" ) ) ;
@@ -383,11 +371,8 @@ LOG( _T( "Adjust()" ) ) ;
 	return 1 ;
 }
 
-///
-///	@fn		WA_HOOK_API HRESULT WA_Enable_hook()
 ///	@brief	フック有効化
 ///	@return	winerror.h準拠
-///
 WA_HOOK_API HRESULT WA_Enable_hook( HWND hwnd )
 {
 LOG(_T("WA_Enable_hook()"));
@@ -428,11 +413,8 @@ LOG(msg);
 	return ERROR_SUCCESS ;
 }
 
-///
-///	@fn		WA_HOOK_API HRESULT WA_Disable_hook()
 ///	@brief	フック無効化
 ///	@return	winerror.h
-///
 WA_HOOK_API HRESULT WA_Disable_hook()
 {
 LOG(_T("WA_Disable_hook()"));
@@ -448,4 +430,4 @@ LOG(msg);
 	return ret ? ERROR_SUCCESS : ::GetLastError();
 }
 
-// [[[[[ End of this module ]]]]]
+// [EOF]

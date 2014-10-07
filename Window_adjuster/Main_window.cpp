@@ -117,16 +117,17 @@ LRESULT Main_window::Window_proc( UINT message, WPARAM wparam, LPARAM lparam )
 //	@param	lparam	未使用
 void Main_window::On_adjust( WPARAM wparam, LPARAM lparam )
 {
+	UNREFERENCED_PARAMETER(lparam);
 // ::OutputDebugString(_T("On_adjust()\n"));
 //	Message_box(_T("On_adjust()"));
 
 	switch (wparam)
 	{
 		case WM_NCRBUTTONUP:	// 右クリック
-::OutputDebugString(_T("WM_NCRBUTTONUP\n"));
+// ::OutputDebugString(_T("WM_NCRBUTTONUP\n"));
 			if (Mouse_hook_struct.wHitTestCode == HTCLOSE)
 			{	// クローズボタン上
-::OutputDebugString(_T("HTCLOSE\n"));
+// ::OutputDebugString(_T("HTCLOSE\n"));
 				if (Show_dialog) break;	// 既に表示している
 
 				Javelin::Auto_reset< BOOL > auto_reset(Show_dialog, TRUE, FALSE);
@@ -142,7 +143,7 @@ void Main_window::On_adjust( WPARAM wparam, LPARAM lparam )
 #if 0
 			if (Mouse_hook_struct.wHitTestCode == HTMAXBUTTON)
 			{	// 最大化ボタン上
-::OutputDebugString(_T("HTMAXBUTTON\n"));
+// ::OutputDebugString(_T("HTMAXBUTTON\n"));
 				break;
 			}
 //			result = Adjust(*mhs_ptr, window_placement, AUTO);
@@ -676,4 +677,4 @@ void Main_window::On_layout_clear()
 	Message_box( _T( "消去しました" ), NULL, MB_OK | MB_ICONINFORMATION ) ;	// @@@@@
 }
 
-// [[[[[ End of this module ]]]]]
+// [EOF]

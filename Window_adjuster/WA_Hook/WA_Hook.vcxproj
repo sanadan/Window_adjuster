@@ -175,6 +175,7 @@
     <ClInclude Include="..\..\Common\Debug_tool.hpp" />
     <ClInclude Include="..\..\Common\Dialog.hpp" />
     <ClInclude Include="..\..\Common\Window.hpp" />
+    <ClInclude Include="WA_Hook.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="01.ico" />
