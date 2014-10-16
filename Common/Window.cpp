@@ -193,7 +193,7 @@ namespace Javelin
 	}
 
 	///	@brief	ウィンドウ属性設定
-	///	@param	index	属性インデックス（GWL_USERDATAなど）
+	///	@param	index	属性インデックス（GWLP_USERDATAなど）
 	///	@param	value	値
 	///	@return	winerror.h準拠
 	HRESULT Window::Set_attribute( int index, LONG_PTR value )
@@ -204,7 +204,7 @@ namespace Javelin
 	}
 
 	///	@brief	ウィンドウ属性取得
-	///	@param	index	属性インデックス（GWL_USERDATAなど）
+	///	@param	index	属性インデックス（GWLP_USERDATAなど）
 	///	@return	値
 	LONG_PTR Window::Get_attribute( int index )
 	{

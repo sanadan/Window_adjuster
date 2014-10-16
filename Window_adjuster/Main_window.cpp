@@ -117,39 +117,27 @@ LRESULT Main_window::Window_proc( UINT message, WPARAM wparam, LPARAM lparam )
 //	@param	lparam	未使用
 void Main_window::On_adjust( WPARAM wparam, LPARAM lparam )
 {
+	UNREFERENCED_PARAMETER(wparam);
 	UNREFERENCED_PARAMETER(lparam);
+
 // ::OutputDebugString(_T("On_adjust()\n"));
 //	Message_box(_T("On_adjust()"));
 
-	switch (wparam)
+	if (Show_dialog)
 	{
-		case WM_NCRBUTTONUP:	// 右クリック
-// ::OutputDebugString(_T("WM_NCRBUTTONUP\n"));
-			if (Mouse_hook_struct.wHitTestCode == HTCLOSE)
-			{	// クローズボタン上
-// ::OutputDebugString(_T("HTCLOSE\n"));
-				if (Show_dialog) break;	// 既に表示している
-
-				Javelin::Auto_reset< BOOL > auto_reset(Show_dialog, TRUE, FALSE);
-
-				Adjust_dialog adjust_dialog;
-				adjust_dialog.Set_instance(Get_instance());
-				adjust_dialog.Set_parent(Mouse_hook_struct.hwnd);
-				adjust_dialog.Set_position(Mouse_hook_struct.pt);
-				adjust_dialog.Do_modal();
-
-				break;
-			}
-#if 0
-			if (Mouse_hook_struct.wHitTestCode == HTMAXBUTTON)
-			{	// 最大化ボタン上
-// ::OutputDebugString(_T("HTMAXBUTTON\n"));
-				break;
-			}
-//			result = Adjust(*mhs_ptr, window_placement, AUTO);
-			break;
-#endif
+// ::OutputDebugString(_T("Show_dialog\n"));
+		return;	// 既に表示している
 	}
+
+	Javelin::Auto_reset< BOOL > auto_reset(Show_dialog, TRUE, FALSE);
+
+	Adjust_dialog adjust_dialog;
+	adjust_dialog.Set_instance(Get_instance());
+//				adjust_dialog.Set_parent(Mouse_hook_struct.hwnd);
+	adjust_dialog.Set_parent(NULL);
+	adjust_dialog.Set_target(Mouse_hook_struct.hwnd);
+	adjust_dialog.Set_position(Mouse_hook_struct.pt);
+	adjust_dialog.Do_modal();
 }
 
 ///	@brief	トレイアイコンでの操作

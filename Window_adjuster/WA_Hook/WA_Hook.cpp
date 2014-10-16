@@ -41,7 +41,7 @@ HMODULE Module_handle = NULL ;
 BOOL Show_dialog = FALSE ;
 
 // ローカル関数宣言
-LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs ) ;
+LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs, WPARAM wparam, LPARAM lparam ) ;
 LRESULT Adjust( MOUSEHOOKSTRUCT& mhs, WINDOWPLACEMENT& window_placement, Adjust_type type, UINT hit_code = NULL ) ;
 
 ///	@brief	DLLエントリ
@@ -91,7 +91,6 @@ static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 {
 	LRESULT result = 0 ;
 
-//	do	// エラー処理用
 	FOR_ONCE()	// エラー処理用
 	{
 		if (code < 0) break;
@@ -129,14 +128,23 @@ static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 
 		case WM_NCRBUTTONUP:	// 右クリック
 			LOG(_T("WM_NCRBUTTONUP"));
+			{
+				TString msg;
+				msg.Format_message(_T("wHitTestCode = %1!d!\n"), mhs_ptr->wHitTestCode);
+				LOG(msg);
+			}
 			if (mhs_ptr->wHitTestCode == HTCLOSE)
 			{	// クローズボタン上
-				::SendMessage(Main_hwnd, RWM_SET_PARAM, (WPARAM)mhs_ptr->hwnd, mhs_ptr->wHitTestCode);
-				::SendMessage(Main_hwnd, RWM_SET_PARAM2, mhs_ptr->pt.x, mhs_ptr->pt.y);
-				::PostMessage(Main_hwnd, RWM_ADJUST, wparam, lparam);
-				//					result = Show_adjust_dialog(*mhs_ptr);
+				result = Show_adjust_dialog(*mhs_ptr, wparam, lparam);
 				break;
 			}
+#if 0	// うまくフックできない
+			if (mhs_ptr->wHitTestCode == HTCAPTION && ::GetAsyncKeyState(VK_CONTROL) >= 0)
+			{	// キャプション上でCtrlキーが押されている
+				result = Show_adjust_dialog(*mhs_ptr, wparam, lparam);
+				break;
+			}
+#endif
 			if (mhs_ptr->wHitTestCode != HTMAXBUTTON)
 			{	// 最大化ボタン上ではない
 				break;
@@ -183,14 +191,20 @@ static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 			break;
 
 		case WM_NCMBUTTONUP:	// 中央クリック
-			if (::GetAsyncKeyState(VK_CONTROL) >= 0)
-			{	// Ctrlキーが押されていない
-				break;
+			LOG(_T("WM_NCMBUTTONUP"));
+			{
+				SHORT ctrl_state = ::GetAsyncKeyState(VK_CONTROL);
+				TString msg;
+				msg.Format_message(_T("ctrl_state = %1!x!"), ctrl_state);
+				LOG(msg);
+				if (ctrl_state >= 0)
+				{	// Ctrlキーが押されていない
+					break;
+				}
+				result = Show_adjust_dialog(*mhs_ptr, wparam, lparam);
+				break; 
 			}
-			result = Show_adjust_dialog(*mhs_ptr);
-			break;
 		}
-		//	} while ( 0 ) ;	// エラー処理用
 	}
 
 	LRESULT result2 = ::CallNextHookEx( Hook_handle, code, wparam, lparam) ;
@@ -206,14 +220,14 @@ static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 ///	@param	mhs	マウスフック情報
 ///	@retval	0	処理しなかった
 ///	@retval	1	処理した
-LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs )
+LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs, WPARAM wparam, LPARAM lparam )
 {
-	if ( Show_dialog ) return 0	;	// 既に表示している
-#if defined( _WIN64 )
-//	if ( !IsWow64() ) return 0 ;
-#else
-//	if ( IsWow64() ) return 0 ;
-#endif
+	::SendMessage(Main_hwnd, RWM_SET_PARAM, (WPARAM)mhs.hwnd, mhs.wHitTestCode);
+	::SendMessage(Main_hwnd, RWM_SET_PARAM2, mhs.pt.x, mhs.pt.y);
+	::PostMessage(Main_hwnd, RWM_ADJUST, wparam, lparam);
+
+#if 0
+	if (Show_dialog) return 0;	// 既に表示している
 
 	Javelin::Auto_reset< BOOL > auto_reset( Show_dialog, TRUE, FALSE ) ;
 
@@ -222,6 +236,7 @@ LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs )
 	adjust_dialog.Set_parent( mhs.hwnd ) ;
 	adjust_dialog.Set_position( mhs.pt ) ;
 	adjust_dialog.Do_modal() ;
+#endif
 
 	return 1 ;
 }

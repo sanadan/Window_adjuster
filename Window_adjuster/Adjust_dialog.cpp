@@ -18,6 +18,7 @@ Adjust_dialog::Adjust_dialog() : Dialog( IDD_ADJUST )
 	Point.y = 0 ;
 	Icon03 = NULL ;
 	Icon06 = NULL ;
+	Target = NULL;
 }
 
 ///	@brief	表示位置設定
@@ -60,9 +61,18 @@ void Adjust_dialog::Set_icon( int control_id, int icon_id )
 	::SendMessage( Get_item( control_id ), BM_SETIMAGE, IMAGE_ICON, ( LPARAM )icon_handle ) ;
 }
 
+///
+void Adjust_dialog::Set_target(HWND target)
+{
+	Target = target;
+}
+
 ///	@brief	WM_INITDIALOGに対する処理
 void Adjust_dialog::On_initdialog()
 {
+//	::OutputDebugString(_T("On_initdialog()\n"));
+
+	// アイコン設定
 	const struct ICON_LIST
 	{
 		int control_id ;
@@ -96,7 +106,8 @@ void Adjust_dialog::On_initdialog()
 	}
 
 	// 親ウィンドウの位置情報取得
-	if ( !::GetWindowPlacement( Get_parent(), &Last_window_placement ) )
+//	if ( !::GetWindowPlacement( Get_parent(), &Last_window_placement ) )
+	if (!::GetWindowPlacement(Target, &Last_window_placement))
 	{
 		// @@@@@ 致命的処理
 		FATAL_MESSAGE() ;
@@ -134,7 +145,8 @@ void Adjust_dialog::On_initdialog()
 	if ( x + cx > desktop.right ) x = desktop.right - cx ;
 	if ( y + cy > desktop.bottom ) y = desktop.bottom - cy ;
 
-	SetWindowPos( Get_handle(), NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER ) ;
+//	SetWindowPos( Get_handle(), NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER ) ;
+	::SetWindowPos( Get_handle(), HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE ) ;
 }
 
 ///	@brief	WM_COMMANDに対する処理
@@ -158,7 +170,8 @@ void Adjust_dialog::On_adjust_button( WPARAM wparam )
 	// 対象ウィンドウ情報取得
 	WINDOWPLACEMENT window_placement ;
 	window_placement.length = sizeof ( window_placement ) ;
-	if ( !::GetWindowPlacement( Get_parent(), &window_placement ) )
+//	if ( !::GetWindowPlacement( Get_parent(), &window_placement ) )
+	if (!::GetWindowPlacement(Target, &window_placement))
 	{
 		// @@@@@ 致命的処理
 		return ;
@@ -166,8 +179,9 @@ void Adjust_dialog::On_adjust_button( WPARAM wparam )
 	const RECT& target = window_placement.rcNormalPosition ;
 
 	// モニタ情報取得
-	HMONITOR monitor = ::MonitorFromWindow( Get_parent(), MONITOR_DEFAULTTONEAREST ) ;
-	MONITORINFO monitor_info ;
+//	HMONITOR monitor = ::MonitorFromWindow( Get_parent(), MONITOR_DEFAULTTONEAREST ) ;
+	HMONITOR monitor = ::MonitorFromWindow(Target, MONITOR_DEFAULTTONEAREST);
+	MONITORINFO monitor_info;
 	monitor_info.cbSize = sizeof ( monitor_info ) ;
 	if ( !::GetMonitorInfo( monitor, &monitor_info ) )
 	{
@@ -273,14 +287,16 @@ void Adjust_dialog::On_adjust_button( WPARAM wparam )
 	if ( target.top + cy > desktop.bottom ) y = desktop.bottom - cy ;
 
 	// ウィンドウ位置設定
-	::SetWindowPos( Get_parent(), NULL, x, y, cx, cy, SWP_NOZORDER ) ;
+//	::SetWindowPos( Get_parent(), NULL, x, y, cx, cy, SWP_NOZORDER ) ;
+	::SetWindowPos(Target, NULL, x, y, cx, cy, SWP_NOZORDER);
 }
 
 ///	@brief	キャンセルボタン処理
 void Adjust_dialog::On_cancel()
 {
 	// ウィンドウを元の位置に戻す
-	::SetWindowPlacement( Get_parent(), &Last_window_placement ) ;
+//	::SetWindowPlacement( Get_parent(), &Last_window_placement ) ;
+	::SetWindowPlacement(Target, &Last_window_placement);
 }
 
 // [EOF]
