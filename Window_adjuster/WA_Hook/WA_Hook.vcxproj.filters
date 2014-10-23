@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Adjust_dialog.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="WA_Hook.cpp" />
     <ClCompile Include="..\..\Common\Buffer.cpp">
@@ -18,7 +17,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Adjust_dialog.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="..\..\Common\Dialog.hpp">
       <Filter>Common</Filter>
@@ -33,20 +31,12 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="WA_Hook.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WA_Hook.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="01.ico" />
-    <None Include="02.ico" />
-    <None Include="03.ico" />
-    <None Include="04.ico" />
-    <None Include="05.ico" />
-    <None Include="06.ico" />
-    <None Include="07.ico" />
-    <None Include="08.ico" />
-    <None Include="09.ico" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

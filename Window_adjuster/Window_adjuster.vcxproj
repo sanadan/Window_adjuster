@@ -338,6 +338,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\Auto_reset.hpp" />
     <ClInclude Include="Adjust_dialog.hpp" />
     <ClInclude Include="Main.hpp" />
     <ClInclude Include="Main_window.hpp" />

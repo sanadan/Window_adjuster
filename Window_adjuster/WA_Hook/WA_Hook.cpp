@@ -5,7 +5,6 @@
 
 #include "stdafx.h"
 #include "WA_Hook.h"
-#include "Adjust_dialog.hpp"
 #include "Misc.hpp"
 #include "Auto_reset.hpp"
 #include "Debug_tool.hpp"
@@ -222,21 +221,10 @@ static LRESULT CALLBACK Mouse_proc( int code, WPARAM wparam, LPARAM lparam )
 ///	@retval	1	処理した
 LRESULT Show_adjust_dialog( MOUSEHOOKSTRUCT& mhs, WPARAM wparam, LPARAM lparam )
 {
+	// 親アプリケーションに通知
 	::SendMessage(Main_hwnd, RWM_SET_PARAM, (WPARAM)mhs.hwnd, mhs.wHitTestCode);
 	::SendMessage(Main_hwnd, RWM_SET_PARAM2, mhs.pt.x, mhs.pt.y);
 	::PostMessage(Main_hwnd, RWM_ADJUST, wparam, lparam);
-
-#if 0
-	if (Show_dialog) return 0;	// 既に表示している
-
-	Javelin::Auto_reset< BOOL > auto_reset( Show_dialog, TRUE, FALSE ) ;
-
-	Adjust_dialog adjust_dialog ;
-	adjust_dialog.Set_instance( Module_handle ) ;
-	adjust_dialog.Set_parent( mhs.hwnd ) ;
-	adjust_dialog.Set_position( mhs.pt ) ;
-	adjust_dialog.Do_modal() ;
-#endif
 
 	return 1 ;
 }
@@ -409,7 +397,7 @@ LOG(msg);
 	RWM_SET_PARAM = ::RegisterWindowMessage(RWM_SET_PARAM_MESSAGE);
 	RWM_SET_PARAM2 = ::RegisterWindowMessage(RWM_SET_PARAM2_MESSAGE);
 
-#if 0
+#if 0	// とりあえずやめておく
 	// OSバージョンチェック
 	OSVERSIONINFO os_version_info ;
 	os_version_info.dwOSVersionInfoSize = sizeof ( os_version_info ) ;

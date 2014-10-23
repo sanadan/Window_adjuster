@@ -155,7 +155,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Adjust_dialog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -169,7 +168,7 @@
     <ClCompile Include="..\..\Common\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Adjust_dialog.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="..\..\Common\Buffer.hpp" />
     <ClInclude Include="..\..\Common\Debug_tool.hpp" />
@@ -178,15 +177,6 @@
     <ClInclude Include="WA_Hook.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="01.ico" />
-    <None Include="02.ico" />
-    <None Include="03.ico" />
-    <None Include="04.ico" />
-    <None Include="05.ico" />
-    <None Include="06.ico" />
-    <None Include="07.ico" />
-    <None Include="08.ico" />
-    <None Include="09.ico" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

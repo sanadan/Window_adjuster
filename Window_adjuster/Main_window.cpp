@@ -20,6 +20,7 @@ using namespace Javelin;
 
 // #pragma warning ( disable : 4127 )
 
+///	@brief	アバウトダイアログクラス
 class About_dialog : public Javelin::Dialog
 {
 public :

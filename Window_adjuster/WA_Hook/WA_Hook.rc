@@ -94,38 +94,6 @@ END
 // Dialog
 //
 
-IDD_ADJUST DIALOGEX 0, 0, 160, 116
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Adjust"
-FONT 10, "Terminal", 400, 0, 0x80
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,56,96,48,16,WS_GROUP
-    PUSHBUTTON      "ÉLÉÉÉìÉZÉã",IDCANCEL,108,96,48,16
-    GROUPBOX        "à⁄ìÆ",IDC_STATIC,4,4,64,68,WS_GROUP
-    PUSHBUTTON      "Å_",IDC_MOVE1,12,16,16,16,BS_ICON | WS_GROUP
-    PUSHBUTTON      "Å™",IDC_MOVE2,28,16,16,16,BS_ICON
-    PUSHBUTTON      "Å^",IDC_MOVE3,44,16,16,16,BS_ICON
-    PUSHBUTTON      "Å©",IDC_MOVE4,12,32,16,16,BS_ICON
-    PUSHBUTTON      "Å{",IDC_MOVE5,28,32,16,16,BS_ICON
-    PUSHBUTTON      "Å®",IDC_MOVE6,44,32,16,16,BS_ICON
-    PUSHBUTTON      "Å^",IDC_MOVE7,12,48,16,16,BS_ICON
-    PUSHBUTTON      "Å´",IDC_MOVE8,28,48,16,16,BS_ICON
-    PUSHBUTTON      "Å_",IDC_MOVE9,44,48,16,16,BS_ICON
-    GROUPBOX        "ÉTÉCÉY",IDC_STATIC,72,4,84,88,WS_GROUP
-    PUSHBUTTON      "Å_",IDC_SIZE1,80,16,16,16,BS_ICON | WS_GROUP
-    PUSHBUTTON      "Å™",IDC_SIZE2,96,16,16,16,BS_ICON
-    PUSHBUTTON      "Å^",IDC_SIZE3,112,16,16,16,BS_ICON
-    PUSHBUTTON      "Å©",IDC_SIZE4,80,32,16,16,BS_ICON
-    PUSHBUTTON      "Å{",IDC_SIZE5,96,32,16,16,BS_ICON
-    PUSHBUTTON      "Å®",IDC_SIZE6,112,32,16,16,BS_ICON
-    PUSHBUTTON      "Å^",IDC_SIZE7,80,48,16,16,BS_ICON
-    PUSHBUTTON      "Å´",IDC_SIZE8,96,48,16,16,BS_ICON
-    PUSHBUTTON      "Å_",IDC_SIZE9,112,48,16,16,BS_ICON
-    PUSHBUTTON      "Åb",IDC_SIZE10,132,32,16,16,BS_ICON
-    PUSHBUTTON      "Å|",IDC_SIZE11,96,68,16,16,BS_ICON
-END
-
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Icon
@@ -133,15 +101,6 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_A01                 ICON                    "01.ico"
-IDI_A02                 ICON                    "02.ico"
-IDI_A03                 ICON                    "03.ico"
-IDI_A04                 ICON                    "04.ico"
-IDI_A05                 ICON                    "05.ico"
-IDI_A06                 ICON                    "06.ico"
-IDI_A07                 ICON                    "07.ico"
-IDI_A08                 ICON                    "08.ico"
-IDI_A09                 ICON                    "09.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

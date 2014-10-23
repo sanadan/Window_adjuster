@@ -11,3 +11,5 @@
 /Window_adjuster/x64/Debug
 /bin_x64_Debug
 *.BAK
+/doxygen.log
+/html

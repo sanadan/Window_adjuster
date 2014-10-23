@@ -28,6 +28,7 @@
     <ClCompile Include="..\Common\Window.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Adjust_dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.hpp" />
@@ -68,6 +69,10 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Window.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Adjust_dialog.hpp" />
+    <ClInclude Include="..\Common\Auto_reset.hpp">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

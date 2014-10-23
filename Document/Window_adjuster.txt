@@ -1,11 +1,11 @@
 ウィンドウ調整ツール
-Window adjuster  Version 0.4.0
-Copyright (C) 2007-2011 Javelin Software
+Window adjuster  Version 0.5.0
+Copyright (C) 2007-2014 Javelin Software
 
 
 【目次】
 　 1.概要
-　 2.動作環境
+　 2.動作確認環境
 　 3.インストール
 　 4.アンインストール
 　 5.使い方
@@ -20,10 +20,9 @@ Copyright (C) 2007-2011 Javelin Software
 　また、ウィンドウクラス単位のウィンドウ位置とアイコン名単位のデスクトッ
 プアイコン位置を、画面サイズ毎に保存／復元することができます。
 
-■ 2.動作環境 ■
-　OS：Windows XP Professional SP3
-　    Windows Vista Home Premium SP1
-　　　（XP以降なら動作するはずですが、未確認です）
+■ 2.動作確認環境 ■
+　OS：Windows 7 Home Premium SP1 (64bit)
+      Windows 8.1 Pro (64bit)
 
 ■ 3.インストール ■
 　1)適当なフォルダに Window_adjuster.exe と WA_Hook.dll をコピーしてくだ
@@ -33,6 +32,9 @@ Copyright (C) 2007-2011 Javelin Software
 　3)タスクトレイに Window adjuster のアイコンが表示されれば完了です。
 　4)必要に応じて、スタートアップフォルダにショートカットを作成したりして
 　　ください。
+　5)「MSVCP120.DLL がないため、プログラムを開始できません。」というエラー
+　　が表示される場合は、以下のランタイムをインストールしてください。
+　　http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
 ■ 4.アンインストール ■
 　1)タスクトレイの Window adjuster アイコンを右クリックしてください。
@@ -75,6 +77,9 @@ Copyright (C) 2007-2011 Javelin Software
 　・本プログラムはフリーウェアです。自由に配布してかまいません。
 
 ■ 7.改版履歴 ■
+　0.5.0 (2014/10/21) :
+    64bit対応
+
 　0.4.0 (2011/12/09) :
 　　ウィンドウ／デスクトップアイコンの位置保存／復元機能追加
 

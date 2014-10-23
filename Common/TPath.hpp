@@ -61,7 +61,7 @@ namespace Javelin
 		}
 	} ;
 
-	///
+	///	@brief	Basic_pathテンプレート
 	template< class _E, class _Tr = char_traits< _E >, class _A = allocator< _E > >
 	class Basic_path : public Basic_string< _E, _Tr, _A >
 	{

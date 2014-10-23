@@ -10,6 +10,7 @@
 
 namespace Javelin
 {
+	///	@brief	アプリケーションクラス
 	class Application
 	{
 	public :
