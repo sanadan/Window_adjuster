@@ -41,6 +41,10 @@ namespace Javelin
 		{
 			return ::FormatMessageW( flags, source, message_ID, language_ID, string_buf, buffer_len, arguments ) ;
 		}
+		static LPCWSTR To_unicode(LPCWSTR source)
+		{
+			return source;
+		}
 	} ;
 
 	///	@brief	ANSI系Win32関数テンプレート
@@ -55,6 +59,15 @@ namespace Javelin
 		{
 			return ::FormatMessageA( flags, source, message_ID, language_ID, string_buf, buffer_len, arguments ) ;
 		}
+		static LPWSTR To_unicode(LPCSTR source)
+		{
+			size_t size;
+			::mbstowcs_s(&size, NULL, 0, source, _TRUNCATE);
+			static Buffer Unicode_buffer;
+			Unicode_buffer.Set_size(size);
+			::mbstowcs_s(&size, (wchar_t *)Unicode_buffer.Get_ptr(), size, source, _TRUNCATE);
+			return (LPWSTR)Unicode_buffer.Get_ptr();
+		}
 	} ;
 
 	///	@brief	Basic_stringテンプレート
@@ -65,7 +78,7 @@ namespace Javelin
 	class Basic_string : public basic_string< _E, _Tr, _A >
 	{
 	protected :
-		Buffer Buffer ;	///< GetBuffer/ReleaseBufferで使用するバッファ
+		Buffer Buffer ;	///< Get_buffer/Release_bufferで使用するバッファ
 		HINSTANCE Instance ;	///< リソースアクセス時のモジュールハンドル
 
 	public :
@@ -208,7 +221,14 @@ namespace Javelin
 			*this = buffer ;
 		}
 
-	protected :
+		///	@brief	Unicode変換
+		///	@return	変換後の文字列
+		LPCWSTR To_unicode()
+		{
+			return Basic_string_Win32< _E >::To_unicode( *this );
+		}
+
+	protected:
 		///	@brief	メッセージ文字列を書式化する（共通処理）
 		///	@param	dwFlag		フォーマットフラグ
 		///	@param	pSource		元データ

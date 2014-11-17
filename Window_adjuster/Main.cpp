@@ -19,6 +19,7 @@ Main App ;	///< メインアプリケーションオブジェクト
 LPCTSTR Main::Title = _T( "Window adjuster" ) ;	///< アプリケーション名
 LPCTSTR Main::Internal_name = _T( "Javelin_Software\\Window_adjuster" ) ;	///< 内部名／Application Data配下のフォルダ名に使用
 LPCTSTR Main::Internal_id = _T( "Javelin software - Window adjuster" ) ;	///< 内部ID／二重起動のチェックに使用
+UINT Main::RWM_QUIT = WM_NULL;	///< コマンドラインオプションによる終了メッセージ
 
 Main_window Main_window ;	///< メインウィンドウクラス
 LPCTSTR Main_window::Save_file_name_format = _T( "%1!d!-%2!d!.ini" ) ;	///< レイアウト情報保存先ファイル名フォーマット
@@ -36,10 +37,20 @@ HRESULT Main::Initialize()
 		return result ;
 	}
 
+	// パラメータチェック
+	for (int i = 0; i < Get_argv(); i++)
+	{
+		if (::_tcscmp(Get_argc()[i], L"/q") == 0)
+		{	// 終了
+			::PostMessage(HWND_BROADCAST, Get_quit_message(), 0, 0);
+			return ERROR_ALREADY_EXISTS;
+		}
+	}
+
 	// 二重起動のチェック
 	if ( Is_already_exists( Get_internal_id() ) )
 	{	// 既に起動している
-		Error_message_box( _T( "既に起動しています" ) ) ;	// @@@@@
+		Error_message_box(_T("既に起動しています"));	// @@@@@
 		return ERROR_ALREADY_EXISTS ;
 	}
 
@@ -98,6 +109,21 @@ LPCTSTR Main::Get_internal_id()
 LPCTSTR Main::Get_application_data_folder()
 {
 	return App.Application_data_folder ;
+}
+
+///	@brief	アプリケーション終了メッセージ
+UINT Main::Get_quit_message()
+{
+	if (RWM_QUIT == WM_NULL)
+	{	// アプリケーション終了メッセージの登録
+		RWM_QUIT = ::RegisterWindowMessage(_T("Javelin/Window_adjuster/RWM_QUIT"));
+		if (RWM_QUIT == NULL)
+		{
+			FATAL_MESSAGE();	// 本来はあり得ない
+		}
+	}
+
+	return RWM_QUIT;
 }
 
 // [EOF]

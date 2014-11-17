@@ -18,6 +18,7 @@ public :
 	static LPCTSTR Get_internal_name() ;
 	static LPCTSTR Get_internal_id() ;
 	static LPCTSTR Get_application_data_folder() ;
+	static UINT Get_quit_message();
 
 private :
 	static LPCTSTR Title ;
@@ -25,6 +26,7 @@ private :
 	static LPCTSTR Internal_id ;
 
 	Javelin::TPath Application_data_folder ; 
+	static UINT RWM_QUIT;
 } ;
 
 // [EOF]

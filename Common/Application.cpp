@@ -6,6 +6,8 @@
 #include "stdafx.h"
 #include "Application.hpp"
 #include "assert.h"
+#include "TString.hpp"
+#include "Shellapi.h"
 
 namespace Javelin
 {
@@ -18,13 +20,30 @@ namespace Javelin
 
 		App_ptr = this ;
 		Instance = NULL ;
+		Argc = NULL;
+		Argv = 0;
 		Show_command = 0 ;
+	}
+
+	///	@brief	デストラクタ
+	Application::~Application()
+	{
+		if (Argc != NULL)
+		{
+			::GlobalFree(Argc);
+			Argc = NULL;
+			Argv = 0;
+		}
 	}
 
 	///	@brief	初期化
 	///	@return	winerror.h準拠
 	HRESULT Application::Initialize()
 	{
+		TString command_line;
+		command_line = Get_command_line();
+		Argc = ::CommandLineToArgvW(command_line.To_unicode(), &Argv);
+
 		return ERROR_SUCCESS ;
 	}
 
@@ -43,6 +62,27 @@ namespace Javelin
 	HINSTANCE Application::Get_instance() const
 	{
 		return Instance ;
+	}
+
+	///	@brief	コマンドライン文字列配列の取得
+	///	@return	文字列配列
+	LPCWSTR *Application::Get_argc() const
+	{
+		return (LPCWSTR *)Argc;
+	}
+
+	///	@brief	コマンドライン文字列配列の数取得
+	///	@return	配列の数
+	int Application::Get_argv() const
+	{
+		return Argv;
+	}
+
+	///	@brief	起動時のコマンドラインの取得
+	///	@return	コマンドライン文字列
+	LPCTSTR Application::Get_command_line()
+	{
+		return ::GetCommandLine();
 	}
 
 	///	@brief	起動時の表示設定取得

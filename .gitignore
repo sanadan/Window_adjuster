@@ -13,3 +13,8 @@
 *.BAK
 /doxygen.log
 /html
+/Window_adjuster/*.aps
+/Window_adjuster/x64/setup/Output
+/Window_adjuster/x64/setup/Window_adjuster.exe
+/Window_adjuster/x64/setup/WA_Hook.dll
+/Window_adjuster/x64/setup/Window_adjuster.txt

@@ -18,6 +18,8 @@
 
 using namespace Javelin;
 
+extern Main App;
+
 // #pragma warning ( disable : 4127 )
 
 ///	@brief	アバウトダイアログクラス
@@ -49,11 +51,11 @@ LRESULT Main_window::Window_proc( UINT message, WPARAM wparam, LPARAM lparam )
 	switch( message ) 
 	{
 		case WM_CREATE :
-			OnCreate() ;
+			On_create() ;
 			break ;
 
 		case WM_DESTROY :
-			OnDestroy() ;
+			On_destroy() ;
 			break ;
 
 		case WM_COMMAND :
@@ -107,6 +109,10 @@ LRESULT Main_window::Window_proc( UINT message, WPARAM wparam, LPARAM lparam )
 			else if (message == RWM_ADJUST)
 			{
 				On_adjust(wparam, lparam);
+			}
+			else if (message == App.Get_quit_message())
+			{	// コマンドラインオプションによる終了
+				Post_message(WM_CLOSE);
 			}
 	}
 
@@ -185,7 +191,7 @@ void Main_window::On_notify_icon( LPARAM lparam )
 }
 
 ///	@brief	ウィンドウ作成時の処理
-void Main_window::OnCreate()
+void Main_window::On_create()
 {
 	// タスクバー再生成メッセージの登録
 	RWM_TASKBARCREATED = ::RegisterWindowMessage( _T( "TaskbarCreated" ) ) ;
@@ -239,7 +245,7 @@ Message_box(msg);
 }
 
 ///	@brief	ウィンドウ破棄時の処理
-void Main_window::OnDestroy()
+void Main_window::On_destroy()
 {
 	// トレイアイコン削除
 	Notify_icon.Delete() ;

@@ -15,17 +15,23 @@ namespace Javelin
 	{
 	public :
 		Application() ;
+		~Application();
 
 		HINSTANCE Get_instance() const ;
+		LPCWSTR *Get_argc() const;
+		int Get_argv() const;
 
 	protected :
 		virtual HRESULT Initialize() ;
 		BOOL Is_already_exists( LPCTSTR name ) ;
+		LPCTSTR Get_command_line();
 		int Get_show_command() const ;
 		HRESULT Load_accelerator( WORD resource ) ;
 
 	private :
 		HINSTANCE Instance ;
+		int Argv;
+		LPWSTR *Argc;
 		int Show_command ;
 		Accelerator Accel ;
 		Mutex Exist_mutex ;

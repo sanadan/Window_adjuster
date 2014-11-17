@@ -17,9 +17,9 @@
 #define WA_HOOK_API __declspec(dllimport)
 #endif
 
-#define	RWM_ADJUST_MESSAGE	_T("Javelin/RWM_ADJUST")
-#define	RWM_SET_PARAM_MESSAGE	_T("Javelin/RWM_SET_PARAM")
-#define	RWM_SET_PARAM2_MESSAGE	_T("Javelin/RWM_SET_PARAM2")
+#define	RWM_ADJUST_MESSAGE	_T("Javelin/Window_adjuster/RWM_ADJUST")
+#define	RWM_SET_PARAM_MESSAGE	_T("Javelin/Window_adjuster/RWM_SET_PARAM")
+#define	RWM_SET_PARAM2_MESSAGE	_T("Javelin/Window_adjuster/RWM_SET_PARAM2")
 
 WA_HOOK_API HRESULT WA_Enable_hook( HWND hwnd ) ;
 WA_HOOK_API HRESULT WA_Disable_hook() ;

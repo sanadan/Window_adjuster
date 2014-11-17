@@ -20,8 +20,8 @@ public :
 protected :
 	virtual LRESULT Window_proc( UINT message, WPARAM wparam, LPARAM lparam ) ;
 
-	void OnCreate() ;
-	void OnDestroy() ;
+	void On_create() ;
+	void On_destroy() ;
 	void On_notify_icon( LPARAM lParam ) ;
 
 	void On_layout_save() ;
@@ -30,7 +30,6 @@ protected :
 
 	void On_adjust(WPARAM wparam, LPARAM lparam);
 
-//	HRESULT Get_application_data_folder( Javelin::TPath& path ) ;
 	void Get_file_name( Javelin::TString& file_name ) ;
 	void Get_file_name2( Javelin::TString& file_name ) ;
 
